@@ -14,12 +14,19 @@ terraform {
   }
 }
 ################# EC2 INSTANCE CREATION #########
-data "aws_ami" "ubuntu" {
+
+# Fetch the latest Amazon Linux 2023 AMI
+data "aws_ami" "amazon_linux" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+    values = ["al2023-ami-*"]  # Amazon Linux 2023 AMI pattern
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
   }
 
   filter {
@@ -27,14 +34,15 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
 
-  owners = ["099720109477"]
+  owners = ["137112412989"]  # AWS official Amazon Linux AMI account ID
 }
 
-resource "aws_instance" "web" {
-  ami           = data.aws_ami.ubuntu.id
+# Create an AWS EC2 instance
+resource "aws_instance" "amazon_linux_vm" {
+  ami           = data.aws_ami.amazon_linux.id
   instance_type = "t2.micro"
 
   tags = {
-    Name = "terraform-atlantis"
+    Name = "AmazonLinux2023-VM"
   }
 }
