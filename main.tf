@@ -35,6 +35,6 @@ resource "aws_instance" "mydemo_instance" {
   instance_type = "t2.micro"
  
   tags = {
-    Name = "MyAmazon2023VM"
+    Name = "MyAmazon2023VM1"
   }
 }
